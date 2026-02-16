@@ -1,35 +1,30 @@
-import java.util.*;
-
 class Solution {
     public int longestBalanced(String s) {
         int n = s.length();
         int maxLength = 0;
 
         for (int i = 0; i < n; i++) {
-            HashMap<Character, Integer> map = new HashMap<>();
+            int[] freq = new int[26];
+            int distinct = 0;
+            int maxFreq = 0;
 
             for (int j = i; j < n; j++) {
-                char c = s.charAt(j);
-                map.put(c, map.getOrDefault(c, 0) + 1);
+                int index = s.charAt(j) - 'a';
 
-                if (allEqual(map)) {
-                    maxLength = Math.max(maxLength, j - i + 1);
+                if (freq[index] == 0) {
+                    distinct++;
+                }
+
+                freq[index]++;
+                maxFreq = Math.max(maxFreq, freq[index]);
+
+                int length = j - i + 1;
+
+                if (length == distinct * maxFreq) {
+                    maxLength = Math.max(maxLength, length);
                 }
             }
         }
         return maxLength;
-    }
-
-    private boolean allEqual(HashMap<Character, Integer> map) {
-        int freq = -1;
-
-        for (int value : map.values()) {
-            if (freq == -1) {
-                freq = value;
-            } else if (freq != value) {
-                return false;
-            }
-        }
-        return true;
     }
 }
